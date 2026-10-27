@@ -1,0 +1,703 @@
+<title>Spell It Right 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+Arabic:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; home grid of section tiles, then one listening card at a time, styled like an IELTS answer sheet. Part 2 of the series: teal (primary) + tangerine (secondary) */
+:root{
+  --bg:#F2F6F6; --paper:#FFFFFF; --ink:#132326; --muted:#53686B; --line:#CFDEDF;
+  --mag:#0D6E73; --mag-soft:#D5ECEC; --on-mag:#FFFFFF;
+  --pist:#E2782F; --pist-soft:#FBE8D8; --on-pist:#2A1405;
+  --ok:#17803F; --ok-soft:#DDF1E2; --bad:#B42318; --bad-soft:#FBE1DE;
+  --f-display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+  --f-ar:"Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1718; --paper:#162224; --ink:#E2EEEE; --muted:#9AB0B1; --line:#2A3C3E;
+  --mag:#4CC4C9; --mag-soft:#123335; --on-mag:#062022;
+  --pist:#FF9B57; --pist-soft:#3A2414; --on-pist:#1E0E03;
+  --ok:#6FD98E; --ok-soft:#163222; --bad:#FF8A7E; --bad-soft:#3A1714; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1718; --paper:#162224; --ink:#E2EEEE; --muted:#9AB0B1; --line:#2A3C3E;
+  --mag:#4CC4C9; --mag-soft:#123335; --on-mag:#062022;
+  --pist:#FF9B57; --pist-soft:#3A2414; --on-pist:#1E0E03;
+  --ok:#6FD98E; --ok-soft:#163222; --bad:#FF8A7E; --bad-soft:#3A1714; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:18px;line-height:1.55}
+.wrap{max-width:900px;margin:0 auto;padding-block:20px 40px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+[lang="ar"]{font-family:var(--f-ar);direction:rtl}
+button{font:inherit;cursor:pointer;border-radius:10px;border:2px solid transparent;padding:10px 18px;font-weight:700}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--pist);outline-offset:2px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.btn{background:var(--mag);color:var(--on-mag)}
+.btn.alt{background:var(--pist);color:var(--on-pist)}
+.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.ghost:hover{border-color:var(--mag)}
+.small{font-size:15px;padding:6px 12px}
+
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:2px solid var(--line);margin-bottom:22px}
+.brand{display:flex;gap:12px;align-items:center}
+.wave{width:44px;height:44px;border-radius:50%;background:var(--mag);color:var(--on-mag);display:grid;place-items:center;flex:none}
+.brand h1{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.brand h1 span{color:var(--pist)}
+.brand small{display:block;color:var(--muted);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:4px 14px;font-weight:700;font-variant-numeric:tabular-nums}
+.chip b{color:var(--mag)}
+.classbtn{font-size:inherit;cursor:pointer;color:var(--ink)}
+.classbtn[aria-pressed="true"]{background:var(--mag);border-color:var(--mag);color:var(--on-mag, #fff)}
+.classbtn[aria-pressed="true"] b{color:inherit}
+.classnote{background:var(--mag-soft);border-radius:12px;padding:12px 16px;margin:0 0 18px;font-weight:700}
+select{font:inherit;font-size:15px;padding:6px 8px;border-radius:8px;border:2px solid var(--line);background:var(--paper);color:var(--ink);max-width:220px}
+
+.intro{display:grid;gap:8px;margin-bottom:22px;max-width:66ch}
+.intro h2{font-size:34px;font-weight:800}
+.intro p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tile{background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:8px;text-align:left;color:var(--ink);font-weight:400}
+.tile:hover{border-color:var(--mag)}
+.tile .n{font-family:var(--f-mono);font-size:14px;color:var(--mag);letter-spacing:.08em}
+.tile h3{font-size:22px}
+.tile p{margin:0;font-size:16px;color:var(--muted)}
+.tile .ar{font-size:16px;color:var(--muted)}
+.bar{height:8px;border-radius:99px;background:var(--pist-soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pist)}
+.tile.test{background:var(--mag-soft);border-color:var(--mag)}
+.tile.test .bar{background:var(--paper)}
+.tile.test .bar i{background:var(--mag)}
+.badge{display:inline-flex;gap:6px;align-items:center;font-size:14px;font-weight:700;color:var(--ok)}
+.newtag{display:inline-block;background:var(--pist);color:var(--on-pist);font-size:12px;font-weight:700;letter-spacing:.06em;border-radius:6px;padding:1px 8px;margin-left:6px;vertical-align:middle}
+
+.sechead{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
+.sechead h2{font-size:30px;font-weight:800}
+.sechead .ar{color:var(--muted);font-size:18px}
+details.tips{background:var(--pist-soft);border-radius:14px;padding:14px 18px;margin-bottom:18px}
+details.tips summary{font-family:var(--f-display);font-weight:700;font-size:20px;cursor:pointer}
+.tiplist{display:grid;gap:12px;margin-top:12px}
+.tip{display:grid;gap:2px}
+.tip p{margin:0}
+.tip p[lang="ar"]{color:var(--muted);font-size:17px}
+
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.dots span{width:14px;height:14px;border-radius:50%;background:var(--line)}
+.dots span.cur{background:var(--mag)}
+.dots span.y{background:var(--ok)}
+.dots span.n{background:var(--bad)}
+
+.qcard{background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:22px;display:grid;gap:18px}
+.qmeta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--muted)}
+.ctx{background:var(--mag-soft);color:var(--mag);font-weight:700;border-radius:6px;padding:2px 10px}
+.players{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.play{background:var(--mag);color:var(--on-mag);font-size:20px;padding:12px 24px;display:inline-flex;gap:10px;align-items:center}
+.play.on{background:var(--pist);color:var(--on-pist)}
+.instr{font-size:15px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.instr b{color:var(--pist)}
+.gapline{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:baseline;font-size:20px}
+.gapline label{font-weight:700}
+.ansbox{font-family:var(--f-mono);font-size:22px;padding:6px 10px;border:none;border-bottom:3px solid var(--ink);background:var(--pist-soft);color:var(--ink);border-radius:6px 6px 0 0;width:min(280px,100%);min-width:0}
+.ansbox.y{border-color:var(--ok);background:var(--ok-soft)}
+.ansbox.n{border-color:var(--bad);background:var(--bad-soft)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.fb{border-radius:12px;padding:14px 16px;display:grid;gap:8px}
+.fb.y{background:var(--ok-soft)}
+.fb.n{background:var(--bad-soft)}
+.fb.w{background:var(--pist-soft)}
+.fb p{margin:0}
+.diff{font-family:var(--f-mono);font-size:22px;letter-spacing:.06em;word-break:break-all}
+.diff .x{color:var(--bad);text-decoration:line-through}
+.diff .m{color:var(--ok);text-decoration:underline;text-decoration-thickness:3px}
+.diffrow{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.diffrow span.l{font-size:14px;color:var(--muted);width:90px}
+.script{font-size:17px;border-left:4px solid var(--pist);padding:4px 0 4px 12px;color:var(--ink);margin:0}
+.script .sp{font-weight:700;color:var(--mag)}
+.gloss{font-size:17px}
+
+.formsheet{background:var(--paper);border:2px solid var(--ink);border-radius:4px;padding:18px;display:grid;gap:12px}
+.formsheet h3{font-size:20px;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.frow{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;font-size:19px}
+.qn{font-family:var(--f-mono);font-weight:700;background:var(--ink);color:var(--bg);border-radius:6px;padding:0 8px;font-size:16px;min-width:2.4em;text-align:center}
+.mark{font-weight:700}
+.mark.y{color:var(--ok)}
+.mark.n{color:var(--bad)}
+
+.predict{background:var(--mag-soft);border-radius:12px;padding:16px;display:grid;gap:10px}
+.predict h4{margin:0;font-family:var(--f-display);font-size:19px}
+.prow2{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:17px}
+.prow2 .pl{flex:1 1 220px;min-width:0}
+.pchips{display:flex;gap:6px;flex-wrap:wrap}
+.pchip{background:var(--paper);border-color:var(--line);color:var(--ink);font-size:15px;padding:5px 12px}
+.pchip.sel{border-color:var(--mag);background:var(--mag);color:var(--on-mag)}
+.pchip.y{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.pchip.n{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tabs button{background:var(--paper);border-color:var(--line);color:var(--ink);font-size:16px}
+.tabs button.cur{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.testrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line)}
+.testrow:last-child{border-bottom:none}
+.pbtn{background:var(--mag);color:var(--on-mag);font-size:15px;padding:6px 12px;white-space:nowrap}
+.confirm{background:var(--pist-soft);border-radius:12px;padding:14px;display:grid;gap:10px}
+
+.score{display:flex;flex-wrap:wrap;gap:22px;align-items:center;background:var(--paper);border:2px solid var(--line);border-radius:16px;padding:20px;margin-bottom:16px}
+.big{font-family:var(--f-display);font-size:64px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:28px;color:var(--muted)}
+.parts{display:grid;gap:8px;flex:1;min-width:220px}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) 60px;gap:10px;align-items:center;font-size:16px}
+.prow .bar{grid-column:1 / -1}
+.cert{border:6px double var(--mag);background:var(--paper);border-radius:6px;padding:28px 22px;text-align:center;display:grid;gap:10px;margin:18px 0}
+.cert h3{font-size:30px;color:var(--mag)}
+.cert .who{font-family:var(--f-display);font-size:34px;font-weight:800;border-bottom:2px solid var(--line);padding-bottom:6px}
+.namein{font:inherit;padding:8px 12px;border-radius:8px;border:2px solid var(--line);background:var(--paper);color:var(--ink);width:min(320px,100%)}
+.review{display:grid;gap:6px;margin-top:10px}
+.rv{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:17px}
+.rv .you{font-family:var(--f-mono)}
+.rv .cor{font-family:var(--f-mono);color:var(--ok);font-weight:700}
+.rv .why{font-size:14px;color:var(--bad);font-weight:700}
+
+footer{margin-top:34px;padding-top:14px;border-top:2px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;font-size:15px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:700;z-index:30;max-width:calc(100% - 32px)}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:20}
+@media (max-width:520px){.brand h1{font-size:24px}.intro h2{font-size:28px}.big{font-size:52px}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="wave" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><g fill="currentColor"><rect x="2" y="10" width="3" height="6" rx="1.5"/><rect x="7.5" y="6" width="3" height="14" rx="1.5"/><rect x="13" y="2" width="3" height="22" rx="1.5"/><rect x="18.5" y="7" width="3" height="12" rx="1.5"/></g></svg></div>
+      <div><h1>Spell It Right <span>2</span></h1><small>IELTS Listening foundations · Part 2</small></div>
+    </div>
+    <div class="chips">
+      <span class="chip">Points <b id="pts">0</b></span>
+      <span class="chip">Badges <b id="bdg">0</b></span>
+      <button class="chip classbtn" id="classBtn" aria-pressed="false">Class mode: <b>Off</b></button>
+      <label class="chip" for="voiceSel" style="display:flex;gap:8px;align-items:center">Voice <select id="voiceSel"></select></label>
+    </div>
+  </header>
+  <main id="app"></main>
+  <footer>
+    <span>Designed by: Nazila Motahari</span>
+    <span style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ghost small" id="saveBtn">Save progress</button>
+      <label class="ghost small" style="border:2px solid var(--line);border-radius:10px;padding:6px 12px;font-weight:700;cursor:pointer">Load progress<input type="file" id="loadIn" accept=".json,application/json" hidden></label>
+    </span>
+  </footer>
+</div>
+
+<script>
+/* ================= DATA ================= */
+const SECTIONS = [
+{ id:"change", n:"01", title:"Listen for the Change", ar:"انتبه للتغيير", limit:1, kind:"items",
+  blurb:"The speaker gives one answer, then changes it. Write the final answer only.",
+  tips:[
+   ["In IELTS, speakers often change their mind. The first thing you hear is usually a trap.","في الآيلتس يغيّر المتحدث رأيه كثيراً. أول إجابة تسمعها غالباً تكون فخّاً."],
+   ["Listen for change words: actually, sorry, no, wait, I mean, but now, instead.","انتبه لكلمات التغيير: actually / sorry / no / wait / I mean / but now / instead."],
+   ["Write the first answer lightly in your head, then replace it if you hear a change word.","احتفظ بالإجابة الأولى في ذهنك، وغيّرها إذا سمعت كلمة تغيير."],
+   ["Listen for 'so' at the end: 'six of us... and my cousin, so seven'. 'So' gives the final number.","كلمة so في النهاية تعطيك الرقم أو الإجابة النهائية."]],
+  items:[
+   {ctx:"Hotel",say:"I'd like to arrive on Tuesday. Oh, actually, can we make it Wednesday instead?",label:"Day of arrival:",ans:["Wednesday"]},
+   {ctx:"Gym form",say:"My surname is Clarke. {sp:CLARK}. Oh, sorry, there's an E at the end. {sp:CLARKE}.",label:"Surname:",ans:["Clarke"]},
+   {ctx:"Cinema",say:"The tickets were thirty-five dirhams, but the price has gone up. They're forty dirhams now.",label:"Ticket price: AED",ans:["40"],type:"num"},
+   {ctx:"Tour",say:"The tour starts at ten. No, wait, that's last year's timetable. It starts at ten thirty.",label:"Tour starts at:",post:"a.m.",ans:["10.30"],type:"num"},
+   {ctx:"Phone",say:"My number is {dg:0501 446 209}. Sorry, the last part is {dg:290}, not {dg:209}.",label:"Mobile:",ans:["0501446290"],type:"code"},
+   {ctx:"College",say:"Your class was in room fourteen, but it has moved to room forty.",label:"New room:",ans:["40"],type:"num"},
+   {ctx:"Assignment",say:"The deadline was the fifth of May, but the teacher gave us one more week, so it's now the twelfth.",label:"New deadline:",post:"May",ans:["12"],type:"num"},
+   {ctx:"Shopping",say:"I wanted the blue bag. Hmm, actually the grey one is cheaper. I'll take the grey one.",label:"Bag colour:",ans:["grey","gray"]},
+   {ctx:"Travel",say:"We usually take the bus to the airport, but this time we're going by taxi.",label:"Going to the airport by:",ans:["taxi"]},
+   {ctx:"Address",say:"The street is Hampton Road. No, sorry, I mean Hamilton Road. {sp:HAMILTON}.",label:"Street:",post:"Road",ans:["Hamilton"]},
+   {ctx:"Restaurant",say:"There'll be six of us. Oh, and my cousin is coming too, so seven.",label:"Number of people:",ans:["7"],type:"num"},
+   {ctx:"Booking",say:"Your reference is {sp:KD} {dg:519}. Sorry, my mistake. It's {sp:KB} {dg:519}. B for brother.",label:"Reference:",ans:["KB519"],type:"code"}
+  ]},
+{ id:"bignum", n:"02", title:"Bigger Numbers", ar:"أرقام أكبر", limit:1, kind:"items",
+  blurb:"Thousands, decimals, percentages, measurements and the 24-hour clock.",
+  tips:[
+   ["'Two thousand four hundred and ninety-nine' = 2499. Write it in digits.","اكتب الأرقام الكبيرة بالأرقام: 2499."],
+   ["'Point' means a decimal: four point five = 4.5.","كلمة point تعني الفاصلة العشرية: 4.5."],
+   ["Percent = %. 'Forty-five percent' = 45%.","percent تعني النسبة المئوية %."],
+   ["24-hour clock: 'nineteen forty' = 19.40 (7.40 p.m.).","الساعة بنظام ٢٤: nineteen forty تعني 19.40."],
+   ["Years: 'eighteen ninety-six' = 1896. 'Two thousand and nine' = 2009.","السنوات: eighteen ninety-six = 1896."],
+   ["Thirteen thousand (13,000) or thirty thousand (30,000)? Listen for the stress.","انتبه للفرق بين thirteen وthirty حتى مع الآلاف."]],
+  items:[
+   {ctx:"Electronics",say:"The laptop costs two thousand four hundred and ninety-nine dirhams.",label:"Price: AED",ans:["2499"],type:"num"},
+   {ctx:"Train",say:"A return ticket is one hundred and eighteen dirhams fifty.",label:"Return ticket: AED",ans:["118.50","118.5"],type:"num"},
+   {ctx:"Survey",say:"About forty-five percent of students walk to college.",label:"Students who walk:",post:"%",ans:["45"],type:"num"},
+   {ctx:"Furniture",say:"The room is four point five metres long.",label:"Room length:",post:"metres",ans:["4.5"],type:"num"},
+   {ctx:"Football",say:"The stadium holds sixty-two thousand people.",label:"Stadium holds:",post:"people",ans:["62000"],type:"num"},
+   {ctx:"Airport",say:"The flight lands at nineteen forty.",label:"Lands at (24-hour clock):",ans:["19.40","1940"],type:"num"},
+   {ctx:"Museum",say:"The museum first opened in eighteen ninety-six.",label:"Year opened:",ans:["1896"],type:"num"},
+   {ctx:"City walk",say:"The bridge is one point two kilometres long.",label:"Bridge length:",post:"km",ans:["1.2"],type:"num"},
+   {ctx:"Course",say:"The diploma course lasts eighteen months.",label:"Course length:",post:"months",ans:["18"],type:"num"},
+   {ctx:"Gym",say:"Membership is seventy-five dirhams a month, or eight hundred dirhams for the whole year.",label:"Yearly membership: AED",ans:["800"],type:"num"},
+   {ctx:"Exams",say:"The final exam is on the twenty-first of June.",label:"Exam date:",post:"June",ans:["21"],type:"num"},
+   {ctx:"Geography",say:"The population of the town is around thirteen thousand.",label:"Population:",ans:["13000"],type:"num"}
+  ]},
+{ id:"twoword", n:"03", title:"Two-Word Answers", ar:"إجابات من كلمتين", limit:2, kind:"items", isNew:true,
+  blurb:"NO MORE THAN TWO WORDS. Spell both words, and check the plural s.",
+  tips:[
+   ["Read the instruction carefully. 'NO MORE THAN TWO WORDS' means one or two words. Three words = wrong.","اقرأ التعليمات: NO MORE THAN TWO WORDS تعني كلمة أو كلمتين فقط. ثلاث كلمات = خطأ."],
+   ["Many IELTS answers are two nouns together: car park, bus station, first aid.","كثير من الإجابات اسمان معاً، مثل car park وbus station."],
+   ["Do not write words that are already on the page. If the sentence says 'the ___ ', don't write 'the'.","لا تكتب الكلمات الموجودة في الجملة مثل the."],
+   ["Plural or singular? 'two passport photos' needs an s.","انتبه للجمع: two passport photos تحتاج s."]],
+  items:[
+   {ctx:"Hotel",say:"You can leave your car in the car park behind the hotel.",pre:"You can leave your car in the",post:"behind the hotel.",ans:["car park"],gl:"موقف السيارات"},
+   {ctx:"Hotel",say:"Children love the swimming pool on the roof.",pre:"Children love the",post:"on the roof.",ans:["swimming pool"],gl:"مسبح"},
+   {ctx:"Work",say:"All staff must do a first aid course.",pre:"All staff must do a",post:"course.",ans:["first aid"],gl:"إسعافات أولية"},
+   {ctx:"City news",say:"The new shopping centre opens next month.",pre:"The new",post:"opens next month.",ans:["shopping centre","shopping center"],gl:"مركز تسوق"},
+   {ctx:"Reception",say:"You can pay by credit card at the front desk.",pre:"You can pay by",post:"at the front desk.",ans:["credit card"],gl:"بطاقة ائتمان"},
+   {ctx:"Application",say:"Please bring two passport photos with your form.",pre:"Please bring two",post:"with your form.",ans:["passport photos","passport photographs"],gl:"صور جواز السفر"},
+   {ctx:"Directions",say:"The bus station is opposite the hospital.",pre:"The",post:"is opposite the hospital.",ans:["bus station"],gl:"محطة الحافلات"},
+   {ctx:"Museum",say:"The children's workshop is in the art gallery.",pre:"The children's workshop is in the",post:".",ans:["art gallery"],gl:"معرض فني"},
+   {ctx:"Safety",say:"Workers must wear safety boots on the building site.",pre:"Workers must wear",post:"on the building site.",ans:["safety boots"],gl:"أحذية السلامة"},
+   {ctx:"Hotel",say:"The hotel has a fitness centre on the ground floor.",pre:"The hotel has a",post:"on the ground floor.",ans:["fitness centre","fitness center"],gl:"مركز لياقة"},
+   {ctx:"Café",say:"Guests can enjoy fresh juice at breakfast.",pre:"Guests can enjoy",post:"at breakfast.",ans:["fresh juice"],gl:"عصير طازج"},
+   {ctx:"New job",say:"Applicants need a medical certificate before they start.",pre:"Applicants need a",post:"before they start.",ans:["medical certificate"],gl:"شهادة طبية"}
+  ]},
+{ id:"tricky", n:"04", title:"Tricky Spellings", ar:"كلمات صعبة الإملاء", limit:1, kind:"items",
+  blurb:"Longer IELTS words with double letters and silent letters.",
+  tips:[
+   ["Break long words into syllables: main-ten-ance, ques-tion-naire.","قسّم الكلمة الطويلة إلى مقاطع: main-ten-ance."],
+   ["Double letters: questionnaire (nn), guarantee (ee), souvenir has none!","انتبه للحروف المزدوجة مثل nn في questionnaire."],
+   ["Silent letters: government (n), guarantee (u).","حروف لا تُنطق: n في government، وu في guarantee."],
+   ["Common endings: -tion (nutrition), -ance (maintenance), -ment (entertainment).","نهايات شائعة: tion- و ance- و ment-."]],
+  items:[
+   {ctx:"Business",say:"The conference will be held in Dubai.",pre:"The",post:"will be held in Dubai.",ans:["conference"],gl:"مؤتمر"},
+   {ctx:"Travel",say:"Travel insurance is not included in the price.",pre:"Travel",post:"is not included in the price.",ans:["insurance"],gl:"تأمين"},
+   {ctx:"Restaurant",say:"There is a vegetarian option on the menu.",pre:"There is a",post:"option on the menu.",ans:["vegetarian"],gl:"نباتي"},
+   {ctx:"Sports club",say:"The pool is closed for maintenance this week.",pre:"The pool is closed for",post:"this week.",ans:["maintenance"],gl:"صيانة"},
+   {ctx:"College",say:"Please complete the questionnaire after the class.",pre:"Please complete the",post:"after the class.",ans:["questionnaire"],gl:"استبيان"},
+   {ctx:"Recycling",say:"Keep the paper and the plastic separate.",pre:"Keep the paper and the plastic",post:".",ans:["separate"],gl:"منفصل"},
+   {ctx:"Office",say:"Write the meeting date in your calendar.",pre:"Write the meeting date in your",post:".",ans:["calendar"],gl:"تقويم"},
+   {ctx:"Holiday",say:"We bought a souvenir at the airport.",pre:"We bought a",post:"at the airport.",ans:["souvenir"],gl:"تذكار"},
+   {ctx:"News",say:"The new park is paid for by the government.",pre:"The new park is paid for by the",post:".",ans:["government"],gl:"الحكومة"},
+   {ctx:"City",say:"Public transportation is free for students.",pre:"Public",post:"is free for students.",ans:["transportation"],gl:"المواصلات"},
+   {ctx:"Electronics",say:"All our products come with a two-year guarantee.",pre:"All our products come with a two-year",post:".",ans:["guarantee"],gl:"ضمان"},
+   {ctx:"Health talk",say:"Today's talk is about nutrition and health.",pre:"Today's talk is about",post:"and health.",ans:["nutrition"],gl:"التغذية"},
+   {ctx:"Resort",say:"The resort has live entertainment every evening.",pre:"The resort has live",post:"every evening.",ans:["entertainment"],gl:"ترفيه"},
+   {ctx:"Jobs",say:"You need a teaching qualification for this job.",pre:"You need a teaching",post:"for this job.",ans:["qualification"],gl:"مؤهل"}
+  ]},
+{ id:"talks", n:"05", title:"Calls & Talks", ar:"مكالمات ومحاضرات", limit:2, kind:"forms", isNew:true,
+  blurb:"Predict each answer first, then listen to a phone call and a tour guide.",
+  tips:[
+   ["Before you listen, predict: is the gap a name, a number or a word?","قبل الاستماع، توقّع نوع الإجابة: اسم؟ رقم؟ كلمة؟"],
+   ["In a talk (one speaker), the notes use different words from the speaker. 'Opens at' may be 'you can come in from'.","في المحاضرة، الملاحظات تستخدم كلمات مختلفة عن كلمات المتحدث."],
+   ["The answers come in order. If you miss one, move on to the next gap.","الإجابات بالترتيب. إذا فاتتك إجابة، انتقل للتالية."],
+   ["Listen for 'but': 'open every day, but on Fridays...' The answer is often after 'but'.","الإجابة غالباً تأتي بعد كلمة but."]],
+  convs:[
+   {title:"Renting an apartment",sheet:"Apartment enquiry form",who:["Agent","Caller"],lines:[
+     [0,"Good morning, Corniche Homes. How can I help?"],
+     [1,"Hi. I'm calling about the two-bedroom apartment on your website."],
+     [0,"Of course. Can I take your name?"],
+     [1,"Yes, it's Daniel Okafor. That's {sp:OKAFOR}."],
+     [0,"Thank you, Daniel. The apartment is in Al Reem, on the ninth floor."],
+     [1,"And how much is the rent?"],
+     [0,"It was ninety-five thousand dirhams a year, but the owner has reduced it to eighty-eight thousand."],
+     [1,"That's good. Is there parking?"],
+     [0,"Yes, you get one space in the underground car park."],
+     [1,"Great. When can I see it?"],
+     [0,"Is Thursday at five fifteen OK?"],
+     [1,"Thursday's difficult for me. What about Saturday, at the same time?"],
+     [0,"Saturday at five fifteen is fine. Please bring your Emirates ID."]],
+    fields:[
+     {label:"Surname:",ans:["Okafor"],pt:"name"},
+     {label:"Floor:",ans:["9"],type:"num",pt:"number"},
+     {label:"Rent per year: AED",ans:["88000"],type:"num",pt:"number"},
+     {label:"Parking: one space in the underground",ans:["car park"],pt:"word"},
+     {label:"Viewing day:",ans:["Saturday"],pt:"word"},
+     {label:"Viewing time:",post:"p.m.",ans:["5.15","05.15","17.15"],type:"num",pt:"number"}]},
+   {title:"Visiting the Heritage Village",sheet:"Heritage Village · visitor notes",who:["Guide","Guide"],lines:[
+     [0,"Welcome to the Heritage Village. Before we start, here is some useful information."],
+     [0,"The village is open every day from nine in the morning until eight in the evening, but on Fridays you can only come in from two in the afternoon."],
+     [0,"Entry is free for students, but adults pay twenty-five dirhams."],
+     [0,"Our most popular area is the pottery workshop, where you can make your own small pot."],
+     [0,"If you want to try it, please book at the information desk near the main gate."],
+     [0,"Lunch is served in the courtyard. Today we have traditional dishes such as harees and luqaimat."],
+     [0,"Finally, please don't touch the old fishing boats. They are more than one hundred and fifty years old."]],
+    fields:[
+     {label:"Friday opening time:",post:"p.m.",ans:["2","2.00","02.00","14.00"],type:"num",pt:"number"},
+     {label:"Adult ticket: AED",ans:["25"],type:"num",pt:"number"},
+     {label:"Most popular area: the pottery",ans:["workshop"],pt:"word"},
+     {label:"Book at the",post:"desk",ans:["information"],pt:"word"},
+     {label:"Lunch is served in the",ans:["courtyard"],pt:"word"},
+     {label:"Age of fishing boats: more than",post:"years",ans:["150"],type:"num",pt:"number"}]}
+  ]}
+];
+
+const TEST = {
+ p1:{title:"Joining a photography course",sheet:"Course enrolment form",who:["Staff","Caller"],lines:[
+   [0,"Good morning, Bright Lens Studio. How can I help you?"],
+   [1,"Hello. I'd like to join the weekend photography course."],
+   [0,"Lovely. Can I have your full name?"],
+   [1,"Yes, it's Mariam Al Kaabi. The family name is {sp:KAABI}."],
+   [0,"Thank you. And a contact number?"],
+   [1,"It's {dg:0552 908 314}."],
+   [0,"Have you done a photography course before?"],
+   [1,"I did a short online course, but I'm still a beginner, really."],
+   [0,"OK, so the beginners' group. That meets on Saturdays. Sunday is for the advanced group."],
+   [1,"Saturday is perfect. What time is the class?"],
+   [0,"It starts at ten and finishes at half past twelve."],
+   [1,"And where is it?"],
+   [0,"We're in Marina Mall, on the second floor, next to the cinema."],
+   [1,"How much is the course?"],
+   [0,"It's normally nine hundred dirhams, but there's a student discount, so for you it's seven hundred and fifty."],
+   [1,"Do I need my own camera?"],
+   [0,"You can borrow one from us, but most students just use a mobile phone. That's fine for the first few weeks."],
+   [1,"And when does the course start?"],
+   [0,"The first class is on the eighth of November."]],
+  fields:[
+   {label:"Family name: Al",ans:["Kaabi"]},
+   {label:"Contact number:",ans:["0552908314"],type:"code"},
+   {label:"Group:",ans:["beginners","beginner","beginners'"]},
+   {label:"Class day:",ans:["Saturday","Saturdays"]},
+   {label:"Class finishes at:",post:"p.m.",ans:["12.30"],type:"num"},
+   {label:"Location:",post:"Mall, second floor",ans:["Marina"]},
+   {label:"Next to the",ans:["cinema"]},
+   {label:"Student price: AED",ans:["750"],type:"num"},
+   {label:"Camera: students can use a",ans:["mobile phone","phone","mobile"]},
+   {label:"First class:",post:"November",ans:["8","08"],type:"num"}]},
+ p2:[
+  {say:"The meeting was on Monday, but it's been moved to Thursday.",label:"Meeting day:",ans:["Thursday"]},
+  {say:"My surname is Reid. That's {sp:REED}. No, sorry, {sp:REID}.",label:"Surname:",ans:["Reid"]},
+  {say:"The return flight leaves at fourteen fifty-five.",label:"Return flight (24-hour clock):",ans:["14.55","1455"],type:"num"},
+  {say:"The car costs sixty-four thousand dirhams.",label:"Car price: AED",ans:["64000"],type:"num"},
+  {say:"About thirty percent of the students live in Al Ain.",label:"Students in Al Ain:",post:"%",ans:["30"],type:"num"},
+  {say:"Your bag weighs seven point five kilos.",label:"Bag weight:",post:"kg",ans:["7.5"],type:"num"},
+  {say:"We need fifteen chairs. Oh, and five more for the teachers, so twenty altogether.",label:"Chairs needed:",ans:["20"],type:"num"},
+  {say:"Your code is {sp:TPW} {dg:62}. That's P for park.",label:"Code:",ans:["TPW62"],type:"code"},
+  {say:"The hotel was built in nineteen eighty-eight.",label:"Year built:",ans:["1988"],type:"num"},
+  {say:"Parking is twelve dirhams for one hour, or forty dirhams for the whole day.",label:"Parking for the whole day: AED",ans:["40"],type:"num"}],
+ p3:[
+  {say:"Lockers are next to the changing rooms.",pre:"Lockers are next to the",post:".",ans:["changing rooms"]},
+  {say:"The library has a quiet study room on the top floor.",pre:"The library has a quiet",post:"on the top floor.",ans:["study room"]},
+  {say:"The festival includes a cooking competition.",pre:"The festival includes a cooking",post:".",ans:["competition"]},
+  {say:"Students must show their identity card at the gate.",pre:"Students must show their",post:"at the gate.",ans:["identity card","ID card"]},
+  {say:"The company is looking for experienced engineers.",pre:"The company is looking for experienced",post:".",ans:["engineers"]},
+  {say:"Our office is next to the pharmacy.",pre:"Our office is next to the",post:".",ans:["pharmacy"]},
+  {say:"Please read the instructions carefully.",pre:"Please read the",post:"carefully.",ans:["instructions"]},
+  {say:"There is a small charge for the guided tour.",pre:"There is a small charge for the",post:".",ans:["guided tour"]},
+  {say:"Lunch will be served in the dining hall.",pre:"Lunch will be served in the",post:".",ans:["dining hall"]},
+  {say:"Remember to bring a refillable water bottle.",pre:"Remember to bring a refillable",post:".",ans:["water bottle"]}],
+ p4:{title:"Welcome talk: College Sports Week",sheet:"Sports Week · notes",who:["Speaker","Speaker"],lines:[
+   [0,"Good morning, everyone, and welcome to Sports Week."],
+   [0,"This year, Sports Week starts on Sunday the sixteenth of November and it lasts for five days."],
+   [0,"All events take place in the main sports hall, except swimming, which is at the Aquatics Centre in Khalifa City."],
+   [0,"To take part, you need to register online by Wednesday. Last year many students registered late, so please don't wait."],
+   [0,"Each team should have eight players, and every player needs a team T-shirt. You can collect your T-shirt from the student services office."],
+   [0,"The most popular event is always the basketball tournament, but this year we're also adding a new event, table tennis."],
+   [0,"Prizes will be given on the final day. The winning team gets a trophy and a voucher worth five hundred dirhams."],
+   [0,"If you have any questions, please email Mr Walsh. That's {sp:WALSH}."],
+   [0,"Finally, it can be very hot, so all outdoor events will finish before eleven in the morning."]],
+  fields:[
+   {label:"Start date: Sunday",post:"November",ans:["16"],type:"num"},
+   {label:"Length:",post:"days",ans:["5"],type:"num"},
+   {label:"Swimming: Aquatics Centre in",post:"City",ans:["Khalifa"]},
+   {label:"Register online by",ans:["Wednesday"]},
+   {label:"Players per team:",ans:["8"],type:"num"},
+   {label:"Collect T-shirts from the student services",ans:["office"]},
+   {label:"New event this year:",ans:["table tennis"]},
+   {label:"Winners get a trophy and a",ans:["voucher"]},
+   {label:"Voucher value: AED",ans:["500"],type:"num"},
+   {label:"Questions: email Mr",ans:["Walsh"]}]}
+};
+const PART_NAMES=["Part 1 · Phone call","Part 2 · Changes & numbers","Part 3 · Words","Part 4 · Talk"];
+const TEST_LIMIT=2;
+
+/* ================= STATE ================= */
+let state={name:"",points:0,sec:{},badges:[],test:null,classMode:false};
+try{if(location.hash==="#class")state.classMode=true}catch(e){}
+const ord=a=>state.classMode?a.slice():shuffle(a);
+function syncClassBtn(){const b=document.getElementById("classBtn");b.setAttribute("aria-pressed",String(state.classMode));b.innerHTML="Class mode: <b>"+(state.classMode?"On":"Off")+"</b>"}
+document.getElementById("classBtn").onclick=()=>{state.classMode=!state.classMode;syncClassBtn();toast(state.classMode?"Class mode on. Everyone sees the same question order.":"Class mode off. Questions are shuffled.");renderHome()};
+function updateChips(){document.getElementById("pts").textContent=state.points;document.getElementById("bdg").textContent=state.badges.length}
+function addBadge(b){if(!state.badges.includes(b)){state.badges.push(b);toast("Badge earned: "+b);confetti()}updateChips()}
+
+/* ================= HELPERS ================= */
+const app=document.getElementById("app");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function norm(s,type){
+  s=(s||"").trim().toLowerCase().replace(/\s+/g," ");
+  if(type==="code")return s.replace(/[\s\-]/g,"");
+  if(type==="num"){s=s.replace(/[\s,]/g,"").replace(/:/g,".").replace(/^aed/,"").replace(/(p\.?m\.?|a\.?m\.?)$/,"")
+     .replace(/(dirhams?|aed|km|kilometres|metres|meters|m|kg|kilos|minutes|months|days|years|people|%|percent)$/,"").replace(/(st|nd|rd|th)$/,"").replace(/\.$/,"");return s}
+  return s.replace(/[.,!]$/,"");
+}
+const LIMIT_TXT={1:"ONE WORD AND/OR A NUMBER",2:"NO MORE THAN TWO WORDS AND/OR A NUMBER"};
+const wordCount=s=>s.trim().split(/\s+/).filter(w=>w&&!/^[\d.,:%]+$/.test(w)).length;
+function judge(given,q,limit){
+  if(!given.trim())return{ok:false,why:"blank"};
+  if(limit&&q.type!=="code"&&wordCount(given)>limit)return{ok:false,why:"over"};
+  return{ok:q.ans.some(a=>norm(a,q.type)===norm(given,q.type)),why:""};
+}
+function transcript(t){return esc(t).replace(/\{sp:([^}]*)\}/g,(m,a)=>a.split(" ").map(w=>w.split("").join("-")).join(" ")).replace(/\{dg:([^}]*)\}/g,"$1")}
+function diffHTML(given,correct){
+  const A=given.trim(),B=correct,a=A.toLowerCase(),b=B.toLowerCase(),n=a.length,m=b.length;
+  const dp=Array.from({length:n+1},()=>new Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+  const ka=new Array(n).fill(false),kb=new Array(m).fill(false);let i=0,j=0;
+  while(i<n&&j<m){if(a[i]===b[j]){ka[i]=kb[j]=true;i++;j++}else if(dp[i+1][j]>=dp[i][j+1])i++;else j++}
+  const g=A.split("").map((c,k)=>ka[k]?esc(c):`<span class="x">${esc(c)}</span>`).join("")||"<em>(blank)</em>";
+  const c=B.split("").map((ch,k)=>kb[k]?esc(ch):`<span class="m">${esc(ch)}</span>`).join("");
+  return `<div class="diffrow"><span class="l">You wrote</span><span class="diff">${g}</span></div><div class="diffrow"><span class="l">Correct</span><span class="diff">${c}</span></div>`;
+}
+let toastT;function toast(msg){let t=document.querySelector(".toast");if(!t){t=document.createElement("div");t.className="toast";t.setAttribute("role","status");document.body.appendChild(t)}t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2600)}
+
+/* ================= SPEECH ================= */
+const synth=window.speechSynthesis||null;
+let voices=[],v0=null,v1=null,playTok=0;
+const LET={A:"ay",B:"bee",C:"see",D:"dee",E:"ee",F:"eff",G:"jee",H:"aitch",I:"eye",J:"jay",K:"kay",L:"el",M:"em",N:"en",O:"oh",P:"pee",Q:"cue",R:"are",S:"ess",T:"tee",U:"you",V:"vee",W:"double you",X:"ex",Y:"why",Z:"zed"};
+const DIG={"0":"oh","1":"one","2":"two","3":"three","4":"four","5":"five","6":"six","7":"seven","8":"eight","9":"nine"};
+function runs(str,dict){const ch=str.toUpperCase().split(""),out=[];for(let i=0;i<ch.length;i++){const c=ch[i];if(c===" "){out.push("|");continue}let n=1;while(ch[i+n]===c)n++;const w=dict[c]||LET[c]||DIG[c]||c;if(n===2){out.push("double "+w);i++}else if(n>=3){out.push("triple "+w);i+=2}else out.push(w)}return out}
+function vScore(v){let s=0;if(/en[-_]GB/i.test(v.lang))s+=4;else if(/en[-_](AU|IE|NZ)/i.test(v.lang))s+=2;else if(/en[-_]US/i.test(v.lang))s+=1;if(/natural|neural|google|online/i.test(v.name))s+=2;return s}
+function loadVoices(){
+  if(!synth)return;voices=synth.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vScore(b)-vScore(a));
+  const sel=document.getElementById("voiceSel");const prev=sel.value;
+  sel.innerHTML=voices.length?voices.map((v,i)=>`<option value="${i}">${esc(v.name.replace(/Microsoft |Google /,""))} (${esc(v.lang)})</option>`).join(""):"<option>Default</option>";
+  if(prev&&voices[prev])sel.value=prev;pickVoices();
+}
+function pickVoices(){const i=+document.getElementById("voiceSel").value||0;v0=voices[i]||null;v1=voices.find(v=>v!==v0&&v.lang===(v0&&v0.lang))||voices.find(v=>v!==v0)||v0}
+if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
+document.getElementById("voiceSel").addEventListener("change",pickVoices);
+const UP={};"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(c=>UP[c]=c);
+/* Normal speed: each line is ONE utterance, so the voice keeps its natural rhythm.
+   Letters are spoken as a comma list ("T, H, O, M..."), digit groups as "oh five five eight, two one three". */
+function naturalLine(text){
+  return text.replace(/\{sp:([^}]*)\}/g,(m,a)=>a.split(/\s+/).map(g=>runs(g,UP).join(", ")).join(". "))
+             .replace(/\{dg:([^}]*)\}/g,(m,a)=>a.split(/\s+/).map(g=>runs(g,DIG).join(" ")).join(", "));
+}
+function buildQueue(lines,slow){
+  if(!slow)return lines.map(([spk,text])=>({t:naturalLine(text),v:spk,p:300}));
+  const q=[];
+  lines.forEach(([spk,text])=>{
+    const re=/\{(sp|dg):([^}]*)\}/g;let last=0,m;
+    const plain=t=>{t=t.trim();if(/[a-z0-9]/i.test(t))q.push({t,v:spk,p:200})};
+    while((m=re.exec(text))){plain(text.slice(last,m.index));
+      if(m[1]==="sp"){runs(m[2],LET).forEach(tok=>{if(tok==="|"){if(q.length)q[q.length-1].p=380}else q.push({t:tok,v:spk,p:90,r:1.1})});}
+      else{m[2].split(/\s+/).forEach(g=>q.push({t:runs(g,DIG).join(" "),v:spk,p:260,r:1.05}))}
+      if(q.length)q[q.length-1].p=350;last=re.lastIndex}
+    plain(text.slice(last));if(q.length)q[q.length-1].p+=350;
+  });return q;
+}
+function stopAudio(){playTok++;if(synth)synth.cancel();document.querySelectorAll(".play.on").forEach(b=>b.classList.remove("on"))}
+function play(lines,slow,btn,onDone){
+  if(!synth){toast("This browser cannot play speech. Try Chrome or Edge.");return}
+  stopAudio();const tok=playTok,queue=buildQueue(lines,slow);let i=0;if(btn)btn.classList.add("on");
+  const step=()=>{if(tok!==playTok)return;if(i>=queue.length){if(btn)btn.classList.remove("on");onDone&&onDone();return}
+    const it=queue[i++],u=new SpeechSynthesisUtterance(it.t);const voice=it.v===1?v1:v0;if(voice){u.voice=voice;u.lang=voice.lang}else u.lang="en-GB";
+    u.rate=slow?.7:1;u.pitch=(it.v===1&&v1===v0)?.8:1;let done=false;const next=()=>{if(done)return;done=true;setTimeout(step,(it.p||0)*(slow?2.5:1))};u.onend=next;u.onerror=next;synth.speak(u)};
+  step();
+}
+const one=t=>[[0,t]];
+
+/* ================= HOME ================= */
+const secTotal=s=>s.kind==="forms"?s.convs.reduce((a,c)=>a+c.fields.length,0):s.items.length;
+function renderHome(){
+  stopAudio();
+  const tiles=SECTIONS.map(s=>{const r=state.sec[s.id],tot=secTotal(s),best=r?r.best:0,pct=Math.round(best/tot*100);
+    return `<button class="tile" data-go="${s.id}"><span class="n">SECTION ${s.n}${s.isNew?'<span class="newtag">NEW SKILL</span>':""}</span><h3>${esc(s.title)}</h3><span class="ar" lang="ar">${s.ar}</span><p>${esc(s.blurb)}</p>
+    <div class="bar" aria-hidden="true"><i style="width:${pct}%"></i></div><p style="font-size:15px">${r?`Best: ${best} / ${tot}`:`${tot} questions`} ${state.badges.includes(s.title)?'<span class="badge">★ Badge</span>':""}</p></button>`}).join("");
+  const tb=state.test;
+  app.innerHTML=`${state.classMode?'<p class="classnote">Class mode is on. Every student sees the questions in the same order.</p>':""}<section class="intro"><h2>Same skills. Harder listening.</h2><p>In Part 1 you heard a word and spelled it. Now the speakers change their minds, the numbers get bigger, and some answers need two words. Finish the five sections, then take the 40-question final test.</p></section>
+  <div class="grid">${tiles}<button class="tile test" data-go="test"><span class="n">FINAL TEST</span><h3>40-Question Test</h3><span class="ar" lang="ar">الاختبار النهائي</span><p>A phone call, single sentences and a talk, like the real exam. Each recording plays twice. Score 32 or more for a certificate.</p>
+  <div class="bar" aria-hidden="true"><i style="width:${tb?Math.round(tb.best/40*100):0}%"></i></div><p style="font-size:15px">${tb?`Best: ${tb.best} / 40`:"Not taken yet"}</p></button></div>`;
+  app.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>b.dataset.go==="test"?startTest():openSection(b.dataset.go));
+}
+
+/* ================= SECTION ================= */
+function header(s){
+  return `<div class="sechead"><button class="ghost small" id="back">← All sections</button><h2>${esc(s.title)}</h2><span class="ar" lang="ar">${s.ar}</span></div>
+  <details class="tips" open><summary>Listening tips</summary><div class="tiplist">${s.tips.map(t=>`<div class="tip"><p>${esc(t[0])}</p><p lang="ar">${t[1]}</p></div>`).join("")}</div></details>`;
+}
+let cur=null;
+function openSection(id){
+  const s=SECTIONS.find(x=>x.id===id);stopAudio();
+  if(s.kind==="forms")return renderForms(s);
+  cur={s,order:ord(s.items.map((_,i)=>i)),i:0,tries:0,res:[],score:0};
+  app.innerHTML=header(s)+`<div class="dots" id="dots"></div><div id="card"></div>`;
+  document.getElementById("back").onclick=renderHome;renderCard();
+}
+function renderDots(){document.getElementById("dots").innerHTML=cur.order.map((_,k)=>`<span class="${k===cur.i?"cur":cur.res[k]===true?"y":cur.res[k]===false?"n":""}"></span>`).join("")}
+function gapHTML(q,id){
+  if(q.pre!==undefined)return `<span>${esc(q.pre)}</span><input class="ansbox" id="${id}" aria-label="Your answer" autocomplete="off" autocapitalize="off" spellcheck="false"><span>${esc(q.post||"")}</span>`;
+  return `<label for="${id}">${esc(q.label)}</label><input class="ansbox" id="${id}" autocomplete="off" autocapitalize="off" spellcheck="false">${q.post?`<span>${esc(q.post)}</span>`:""}`;
+}
+function renderCard(){
+  renderDots();const q=cur.s.items[cur.order[cur.i]];cur.tries=0;
+  document.getElementById("card").innerHTML=`<div class="qcard">
+   <div class="qmeta"><span class="ctx">${esc(q.ctx)}</span><span>Question ${cur.i+1} of ${cur.order.length}</span></div>
+   <div class="players"><button class="play" id="pl">▶ Listen</button><button class="ghost" id="slow">Slow</button></div>
+   <p class="instr" style="margin:0">Write <b>${LIMIT_TXT[cur.s.limit]}</b></p>
+   <div class="gapline">${gapHTML(q,"ans")}</div>
+   <div class="actions"><button class="btn" id="chk">Check</button></div>
+   <div id="fb"></div></div>`;
+  const lines=one(q.say),inp=document.getElementById("ans");
+  document.getElementById("pl").onclick=e=>play(lines,false,e.currentTarget);
+  document.getElementById("slow").onclick=()=>play(lines,true,document.getElementById("pl"));
+  document.getElementById("chk").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter")check()};
+}
+function check(){
+  const q=cur.s.items[cur.order[cur.i]],inp=document.getElementById("ans"),fb=document.getElementById("fb"),val=inp.value;
+  if(!val.trim()){toast("Type your answer first.");return}
+  const r=judge(val,q,cur.s.limit);
+  const gloss=q.gl?`<p class="gloss"><b>${esc(q.ans[0])}</b> = <span lang="ar">${q.gl}</span></p>`:"";
+  const script=`<p class="script">“${transcript(q.say)}”</p>`;
+  if(r.ok){const pts=cur.tries===0?10:5;state.points+=pts;cur.score++;cur.res[cur.i]=true;inp.className="ansbox y";inp.readOnly=true;
+    fb.className="fb y";fb.innerHTML=`<p><b>Correct! +${pts} points</b></p>${gloss}${script}`;finishQ();}
+  else if(cur.tries===0){cur.tries=1;inp.className="ansbox n";fb.className="fb w";
+    fb.innerHTML=r.why==="over"?`<p><b>Too many words.</b> The instruction says ${LIMIT_TXT[cur.s.limit]}. In the exam this answer scores zero. Try again.</p>`:`<p><b>Not quite.</b> Listen again. Did the speaker change the answer? Check every letter.</p>`;inp.focus();}
+  else{cur.res[cur.i]=false;inp.className="ansbox n";inp.readOnly=true;fb.className="fb n";
+    fb.innerHTML=`<p><b>The answer is ${esc(q.ans[0])}</b>${r.why==="over"?" (your answer had too many words)":""}</p>${diffHTML(val,q.ans[0])}${gloss}${script}`;finishQ();}
+  updateChips();renderDots();
+}
+function finishQ(){
+  const a=document.querySelector(".actions"),last=cur.i===cur.order.length-1;
+  a.innerHTML=`<button class="btn alt" id="nx">${last?"See my score":"Next question →"}</button>`;
+  const nx=document.getElementById("nx");nx.focus();nx.onclick=()=>{stopAudio();if(last)sectionDone();else{cur.i++;renderCard()}};
+}
+function sectionDone(){
+  const s=cur.s,tot=s.items.length,sc=cur.score,r=state.sec[s.id]||{best:0};r.best=Math.max(r.best,sc);state.sec[s.id]=r;
+  const need=Math.ceil(tot*.8),pass=sc>=need;if(pass)addBadge(s.title);
+  const missed=cur.order.map((ix,k)=>cur.res[k]===false?s.items[ix]:null).filter(Boolean);
+  document.getElementById("card").innerHTML=`<div class="qcard"><div class="score" style="margin:0;border:none;padding:0"><div class="big">${sc}<small> / ${tot}</small></div>
+   <div style="display:grid;gap:6px;flex:1;min-width:200px"><h3 style="font-size:24px">${pass?"Excellent. Badge unlocked!":"Good effort. Practise again to reach "+need+"."}</h3>
+   <p style="margin:0;color:var(--muted)">${pass?"You are ready for the next section.":"Look at the answers you missed below, then try again."}</p></div></div>
+   ${missed.length?`<div><p style="margin:0 0 6px;font-weight:700">Answers to review</p><div class="review">${missed.map(q=>`<div class="rv"><span class="cor">${esc(q.ans[0])}</span><span>${transcript(q.say)}</span></div>`).join("")}</div></div>`:""}
+   <div class="actions"><button class="btn" id="again">Try again</button><button class="ghost" id="home">All sections</button></div></div>`;
+  document.getElementById("again").onclick=()=>openSection(s.id);document.getElementById("home").onclick=renderHome;
+}
+
+/* ================= CALLS & TALKS (with prediction step) ================= */
+const PT={name:"Name",number:"Number",word:"Word"};
+function renderForms(s){
+  stopAudio();const done={},pred=s.convs.map(()=>({}));
+  app.innerHTML=header(s)+s.convs.map((c,ci)=>`<div class="qcard" style="margin-bottom:16px">
+   <div class="qmeta"><span class="ctx">${ci===0?"Conversation":"Talk"} ${ci+1}</span><span>${c.fields.length} questions</span></div>
+   <h3 style="font-size:24px">${esc(c.title)}</h3>
+   <div class="predict" id="pr${ci}"><h4>Step 1 · Predict</h4><p style="margin:0">Read the ${ci===0?"form":"notes"}. What type of answer goes in each gap?</p>
+    ${c.fields.map((f,fi)=>`<div class="prow2"><span class="qn">${fi+1}</span><span class="pl">${esc(f.label)} ____ ${esc(f.post||"")}</span><span class="pchips">${Object.keys(PT).map(k=>`<button class="pchip" data-c="${ci}" data-f="${fi}" data-k="${k}">${PT[k]}</button>`).join("")}</span></div>`).join("")}
+    <div class="actions"><button class="btn alt" data-pc="${ci}">Check predictions</button><button class="ghost small" data-skip="${ci}">Skip</button></div><div data-pfb="${ci}"></div></div>
+   <p style="margin:0;font-weight:700;font-family:var(--f-display);font-size:19px">Step 2 · Listen and write</p>
+   <p class="instr" style="margin:0">Write <b>${LIMIT_TXT[s.limit]}</b> for each answer</p>
+   <div class="players"><button class="play" data-p="${ci}" disabled>▶ Listen</button><button class="ghost" data-s="${ci}" disabled>Slow</button><span data-lock="${ci}" style="font-size:15px;color:var(--muted)">Finish Step 1 to unlock the audio.</span></div>
+   <div class="formsheet"><h3>${esc(c.sheet)}</h3>${c.fields.map((f,fi)=>`<div class="frow"><span class="qn">${fi+1}</span>${gapHTML(f,`f${ci}_${fi}`)}<span class="mark" id="m${ci}_${fi}"></span></div>`).join("")}</div>
+   <div class="actions"><button class="btn" data-ck="${ci}">Check answers</button></div><div data-fb="${ci}"></div></div>`).join("");
+  document.getElementById("back").onclick=renderHome;
+  const unlock=ci=>{app.querySelectorAll(`[data-p="${ci}"],[data-s="${ci}"]`).forEach(b=>b.disabled=false);const l=app.querySelector(`[data-lock="${ci}"]`);if(l)l.remove()};
+  app.querySelectorAll(".pchip").forEach(b=>b.onclick=()=>{const ci=+b.dataset.c,fi=+b.dataset.f;if(pred[ci].checked)return;pred[ci][fi]=b.dataset.k;
+    app.querySelectorAll(`.pchip[data-c="${ci}"][data-f="${fi}"]`).forEach(x=>x.classList.toggle("sel",x===b))});
+  app.querySelectorAll("[data-pc]").forEach(b=>b.onclick=()=>{const ci=+b.dataset.pc,c=s.convs[ci];
+    if(c.fields.some((f,fi)=>!pred[ci][fi])){toast("Choose a type for every gap.");return}
+    pred[ci].checked=true;let ok=0;
+    c.fields.forEach((f,fi)=>{app.querySelectorAll(`.pchip[data-c="${ci}"][data-f="${fi}"]`).forEach(x=>{x.classList.remove("sel");if(x.dataset.k===f.pt)x.classList.add("y");else if(x.dataset.k===pred[ci][fi])x.classList.add("n");x.disabled=true});if(pred[ci][fi]===f.pt)ok++});
+    state.points+=ok*2;updateChips();
+    app.querySelector(`[data-pfb="${ci}"]`).innerHTML=`<p style="margin:0"><b>${ok} / ${c.fields.length} predictions correct (+${ok*2} points).</b> Now listen and check.</p>`;
+    b.parentNode.remove();unlock(ci)});
+  app.querySelectorAll("[data-skip]").forEach(b=>b.onclick=()=>{const ci=+b.dataset.skip;document.getElementById("pr"+ci).hidden=true;unlock(ci)});
+  app.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>play(s.convs[b.dataset.p].lines,false,b));
+  app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>play(s.convs[b.dataset.s].lines,true,app.querySelector(`[data-p="${b.dataset.s}"]`)));
+  app.querySelectorAll("[data-ck]").forEach(b=>b.onclick=()=>{
+    const ci=+b.dataset.ck,c=s.convs[ci];let sc=0;
+    c.fields.forEach((f,fi)=>{const inp=document.getElementById(`f${ci}_${fi}`),r=judge(inp.value,f,s.limit);if(r.ok)sc++;inp.className="ansbox "+(r.ok?"y":"n");inp.readOnly=true;
+      const m=document.getElementById(`m${ci}_${fi}`);m.className="mark "+(r.ok?"y":"n");m.textContent=r.ok?"✓":"✗ "+f.ans[0]+(r.why==="over"?" (too many words)":"")});
+    if(done[ci]===undefined){state.points+=sc*10;done[ci]=sc}
+    stopAudio();
+    b.parentNode.innerHTML=`<button class="ghost" data-r="1">Try Calls & Talks again</button>`;
+    app.querySelector(`[data-r]`).onclick=()=>renderForms(s);
+    app.querySelector(`[data-fb="${ci}"]`).innerHTML=`<div class="fb ${sc>=Math.ceil(c.fields.length*.8)?"y":"w"}"><p><b>${sc} / ${c.fields.length} correct.</b> Read the script and find where each answer was said. Look for the words that changed.</p>${c.lines.map(l=>`<p class="script"><span class="sp">${c.who[l[0]]}:</span> ${transcript(l[1])}</p>`).join("")}</div>`;
+    if(Object.keys(done).length===s.convs.length){const tot=Object.values(done).reduce((a,b)=>a+b,0),r=state.sec[s.id]||{best:0};r.best=Math.max(r.best,tot);state.sec[s.id]=r;if(tot>=Math.ceil(secTotal(s)*.8))addBadge(s.title)}
+    updateChips();
+  });
+}
+
+/* ================= FINAL TEST ================= */
+let T=null;
+function startTest(){
+  stopAudio();
+  const parts=[{name:PART_NAMES[0],convs:[TEST.p1]},{name:PART_NAMES[1],items:ord(TEST.p2)},{name:PART_NAMES[2],items:ord(TEST.p3)},{name:PART_NAMES[3],convs:[TEST.p4]}];
+  let n=1;const qs=[];
+  parts.forEach((p,pi)=>{if(p.items)p.items.forEach(q=>{q.no=n++;q.part=pi;qs.push(q)});else p.convs.forEach(c=>c.fields.forEach(f=>{f.no=n++;f.part=pi;qs.push(f)}))});
+  T={parts,qs,ans:{},plays:{},p:0,confirm:false};
+  app.innerHTML=`<div class="sechead"><button class="ghost small" id="back">← Leave test</button><h2>Final Test</h2><span class="ar" lang="ar">الاختبار النهائي</span></div>
+  <details class="tips"><summary>Test rules</summary><div class="tiplist">
+   <div class="tip"><p>40 questions in four parts. You can move between parts.</p><p lang="ar">٤٠ سؤالاً في أربعة أجزاء، ويمكنك التنقل بينها.</p></div>
+   <div class="tip"><p>Each recording plays a maximum of two times. There is no slow mode.</p><p lang="ar">كل تسجيل يُشغَّل مرتين فقط، ولا يوجد وضع بطيء.</p></div>
+   <div class="tip"><p>Write NO MORE THAN TWO WORDS AND/OR A NUMBER. Spelling must be correct.</p><p lang="ar">اكتب كلمتين كحد أقصى و/أو رقماً، ويجب أن تكون التهجئة صحيحة.</p></div>
+   <div class="tip"><p>Read the questions in each part before you press play.</p><p lang="ar">اقرأ أسئلة كل جزء قبل تشغيل التسجيل.</p></div></div></details>
+  <div class="tabs" id="tabs"></div><div id="sheet"></div>`;
+  document.getElementById("back").onclick=renderHome;renderPart();
+}
+function playBtn(key,label){const left=2-(T.plays[key]||0);return `<button class="pbtn" data-k="${key}" ${left<=0?"disabled":""}>▶ ${label} (${left} left)</button>`}
+function renderPart(){
+  stopAudio();const p=T.parts[T.p];
+  document.getElementById("tabs").innerHTML=T.parts.map((pp,i)=>`<button class="${i===T.p?"cur":""}" data-t="${i}">Part ${i+1}</button>`).join("");
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{T.p=+b.dataset.t;T.confirm=false;renderPart()});
+  let body="";
+  if(p.items){body=`<div class="formsheet"><h3>${esc(p.name)} · Questions ${p.items[0].no}–${p.items[p.items.length-1].no}</h3><p class="instr" style="margin:0">Write <b>${LIMIT_TXT[TEST_LIMIT]}</b> for each answer</p>
+    ${p.items.map(q=>`<div class="testrow"><span class="qn">${q.no}</span>${playBtn("q"+q.no,"Play")}<div class="gapline" style="font-size:18px">${gapHTML(q,"t"+q.no)}</div></div>`).join("")}</div>`}
+  else{body=p.convs.map((c,ci)=>`<div class="formsheet" style="margin-bottom:16px"><h3>${esc(p.name)} · Questions ${c.fields[0].no}–${c.fields[c.fields.length-1].no}</h3>
+    <p class="instr" style="margin:0">Write <b>${LIMIT_TXT[TEST_LIMIT]}</b> for each answer</p>
+    <div class="players">${playBtn("c"+T.p,"Play recording")}</div><p style="margin:0;font-weight:700">${esc(c.sheet)}</p>
+    ${c.fields.map(f=>`<div class="frow"><span class="qn">${f.no}</span>${gapHTML(f,"t"+f.no)}</div>`).join("")}</div>`).join("")}
+  const last=T.p===T.parts.length-1,answered=Object.values(T.ans).filter(v=>v.trim()).length;
+  body+=`<div class="actions" style="margin-top:16px">${T.p>0?'<button class="ghost" id="prev">← Previous part</button>':""}${!last?'<button class="btn" id="next">Next part →</button>':'<button class="btn" id="sub">Submit test</button>'}</div>
+   ${T.confirm?`<div class="confirm" style="margin-top:12px"><p style="margin:0"><b>Submit now?</b> You have answered ${answered} of 40 questions. You cannot change answers after this.</p><div class="actions"><button class="btn" id="yes">Yes, submit</button><button class="ghost" id="no">Keep working</button></div></div>`:""}`;
+  document.getElementById("sheet").innerHTML=body;
+  T.qs.filter(q=>q.part===T.p).forEach(q=>{const i=document.getElementById("t"+q.no);i.value=T.ans[q.no]||"";i.oninput=()=>T.ans[q.no]=i.value});
+  document.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=b.dataset.k;if((T.plays[k]||0)>=2)return;T.plays[k]=(T.plays[k]||0)+1;
+    const lines=k[0]==="c"?p.convs[0].lines:one(T.qs.find(q=>q.no===+k.slice(1)).say);
+    const left=2-T.plays[k];b.textContent=`▶ ${k[0]==="c"?"Play recording":"Play"} (${left} left)`;b.disabled=true;
+    play(lines,false,null,()=>{b.disabled=left<=0})});
+  const g=id=>document.getElementById(id);
+  if(g("prev"))g("prev").onclick=()=>{T.p--;renderPart()};
+  if(g("next"))g("next").onclick=()=>{T.p++;renderPart();window.scrollTo(0,0)};
+  if(g("sub"))g("sub").onclick=()=>{T.confirm=true;renderPart()};
+  if(g("yes"))g("yes").onclick=submitTest;
+  if(g("no"))g("no").onclick=()=>{T.confirm=false;renderPart()};
+}
+function submitTest(){
+  stopAudio();
+  const res=T.qs.map(q=>{const given=T.ans[q.no]||"",r=judge(given,q,TEST_LIMIT);return{q,given,ok:r.ok,why:r.why}});
+  const score=res.filter(r=>r.ok).length,pp=[0,1,2,3].map(pi=>res.filter(r=>r.q.part===pi&&r.ok).length);
+  state.points+=score*5;const prev=state.test?state.test.best:0;state.test={best:Math.max(prev,score),last:score,date:new Date().toISOString().slice(0,10)};
+  const pass=score>=32;if(pass)addBadge("Final Test 2 Certificate");updateChips();
+  const level=score>=36?"Ready for full IELTS Listening practice tests.":score>=32?"Strong work. Move on to full Part 1 and Part 2 practice tests.":score>=24?"Nearly there. Repeat the sections where you lost marks.":"Keep practising. Go back to the five sections and aim for a badge in each.";
+  app.innerHTML=`<div class="sechead"><button class="ghost small" id="back">← All sections</button><h2>Your results</h2></div>
+  <div class="score"><div class="big">${score}<small> / 40</small></div><div class="parts">${PART_NAMES.map((n,i)=>`<div class="prow"><span>${esc(n)}</span><b style="text-align:right;font-variant-numeric:tabular-nums">${pp[i]}/10</b><div class="bar"><i style="width:${pp[i]*10}%"></i></div></div>`).join("")}</div></div>
+  <p style="font-size:20px;font-weight:700;margin:0 0 6px">${level}</p>
+  ${pass?`<div style="display:grid;gap:8px;margin-top:14px"><label for="cname" style="font-weight:700">Your name for the certificate</label><input id="cname" class="namein" value="${esc(state.name)}" placeholder="Type your full name"></div>
+   <div class="cert"><p class="instr" style="margin:0">Certificate of achievement</p><h3>Spell It Right 2 · Listening Foundations</h3><p style="margin:0">This certifies that</p><div class="who" id="cwho">${esc(state.name||"Your name")}</div>
+   <p style="margin:0">scored <b>${score} / 40</b> on the Part 2 Final Test: corrections, numbers, two-word answers and note completion.</p><p style="margin:0;color:var(--muted)">${state.test.date} · Designed by: Nazila Motahari</p></div>`:
+   `<p style="color:var(--muted)">Score 32 or more to unlock your certificate.</p>`}
+  <h3 style="font-size:22px;margin-top:20px">Check your answers</h3>
+  <div class="review">${res.map(r=>`<div class="rv"><span class="qn">${r.q.no}</span><span class="mark ${r.ok?"y":"n"}">${r.ok?"✓":"✗"}</span><span class="you">${esc(r.given||"(blank)")}</span>${r.ok?"":`<span class="cor">→ ${esc(r.q.ans[0])}</span>`}${r.why==="over"?'<span class="why">too many words</span>':""}</div>`).join("")}</div>
+  <h3 style="font-size:22px;margin-top:20px">Scripts</h3>
+  <details class="tips" style="background:var(--paper);border:2px solid var(--line)"><summary>Show all scripts</summary><div class="tiplist">
+   ${[0,3].map(pi=>{const c=T.parts[pi].convs[0];return `<p style="margin:8px 0 0;font-weight:700">Part ${pi+1}: ${esc(c.title)}</p>`+c.lines.map(l=>`<p class="script"><span class="sp">${c.who[l[0]]}:</span> ${transcript(l[1])}</p>`).join("")}).join("")}
+   ${[1,2].map(pi=>`<p style="margin:8px 0 0;font-weight:700">Part ${pi+1}</p>`+T.parts[pi].items.map(q=>`<p class="script"><b>${q.no}.</b> ${transcript(q.say)}</p>`).join("")).join("")}</div></details>
+  <div class="actions" style="margin-top:16px"><button class="btn" id="retake">Take the test again</button><button class="ghost" id="home">All sections</button></div>`;
+  document.getElementById("back").onclick=renderHome;document.getElementById("home").onclick=renderHome;document.getElementById("retake").onclick=startTest;
+  const cn=document.getElementById("cname");if(cn)cn.oninput=()=>{state.name=cn.value;document.getElementById("cwho").textContent=cn.value||"Your name"};
+  window.scrollTo(0,0);if(pass)confetti();
+}
+
+/* ================= SAVE / LOAD ================= */
+document.getElementById("saveBtn").onclick=()=>{
+  try{const blob=new Blob([JSON.stringify({app:"spell-it-right-2",v:1,state},null,2)],{type:"application/json"});const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download=`spell-it-right-2-${(state.name||"progress").replace(/\s+/g,"-")}.json`;document.body.appendChild(a);a.click();a.remove();toast("Progress file saved.")}catch(e){toast("Saving is not available here.")}
+};
+document.getElementById("loadIn").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="spell-it-right-2")throw 0;const cm=state.classMode;state=Object.assign({name:"",points:0,sec:{},badges:[],test:null},d.state);state.classMode=cm;updateChips();renderHome();toast("Progress loaded.")}catch(err){toast("That file is not a Spell It Right 2 progress file.")}};r.readAsText(f);e.target.value=""};
+
+/* ================= CONFETTI ================= */
+function confetti(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const c=document.getElementById("confetti"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;
+  const cs=getComputedStyle(document.documentElement),cols=["--mag","--pist","--ok"].map(v=>cs.getPropertyValue(v).trim()).concat(["#F5C542"]);
+  const P=Array.from({length:140},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.4,vx:(Math.random()-.5)*3,vy:2+Math.random()*3,s:5+Math.random()*6,r:Math.random()*6,c:cols[Math.floor(Math.random()*cols.length)]}));
+  let f=0;(function tick(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore()});if(++f<180)requestAnimationFrame(tick);else x.clearRect(0,0,c.width,c.height)})();
+}
+
+updateChips();syncClassBtn();renderHome();
+</script>
